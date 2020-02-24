@@ -1,6 +1,6 @@
-package com.example.jdbcservlets.data.config;
+package com.jdbcservlets.data.config;
 
-import com.example.jdbcservlets.data.exeptions.ConnectionException;
+import com.jdbcservlets.data.exeptions.ConnectionException;
 import lombok.extern.slf4j.Slf4j;
 
 import java.sql.Connection;
