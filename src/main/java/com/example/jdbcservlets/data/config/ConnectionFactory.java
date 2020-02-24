@@ -1,0 +1,26 @@
+package com.example.jdbcservlets.data.config;
+
+import com.example.jdbcservlets.data.exeptions.ConnectionException;
+import lombok.extern.slf4j.Slf4j;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+
+@Slf4j
+public class ConnectionFactory {
+
+    private static final String CONNECTION_FAILURE_MSG = "Connection to DB failed";
+
+    private static final String URL = "jdbc:mariadb://localhost:3306/petproject-testing?user=root&password=root";
+
+    public static Connection getConnection() {
+        try {
+            return DriverManager.getConnection(URL);
+        } catch (SQLException e) {
+            log.error(CONNECTION_FAILURE_MSG, e);
+            throw new ConnectionException(CONNECTION_FAILURE_MSG, e);
+        }
+    }
+
+}
