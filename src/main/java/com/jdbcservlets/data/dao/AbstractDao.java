@@ -1,7 +1,7 @@
-package com.example.jdbcservlets.data.dao;
+package com.jdbcservlets.data.dao;
 
-import com.example.jdbcservlets.data.domain.Persistable;
-import com.example.jdbcservlets.data.exeptions.PersistenceException;
+import com.jdbcservlets.data.domain.Persistable;
+import com.jdbcservlets.data.exeptions.PersistenceException;
 import lombok.extern.slf4j.Slf4j;
 
 import java.sql.Connection;
@@ -22,7 +22,7 @@ public abstract class AbstractDao<T extends Persistable<ID>, ID> implements Gene
 
     protected abstract String getSelectByIdQuery();
 
-    protected abstract String getCreateQuery();
+    protected abstract String getInsertQuery();
 
     protected abstract String getDeleteQuery();
 
@@ -61,7 +61,7 @@ public abstract class AbstractDao<T extends Persistable<ID>, ID> implements Gene
 
     @Override
     public T save(T object) {
-        String createQuery = getCreateQuery();
+        String createQuery = getInsertQuery();
         try (PreparedStatement statement = connection.prepareStatement(createQuery)) {
             prepareInsertStatement(statement, object);
             int count = statement.executeUpdate();

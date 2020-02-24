@@ -1,4 +1,4 @@
-package com.example.jdbcservlets.data.exeptions;
+package com.jdbcservlets.data.exeptions;
 
 public class ConnectionException extends RuntimeException {
     public ConnectionException(String message, Throwable cause) {

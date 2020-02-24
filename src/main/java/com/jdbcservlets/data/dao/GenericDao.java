@@ -1,4 +1,4 @@
-package com.example.jdbcservlets.data.dao;
+package com.jdbcservlets.data.dao;
 
 import java.util.List;
 import java.util.Optional;
