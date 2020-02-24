@@ -18,9 +18,17 @@ public abstract class AbstractDao<T extends Persistable<ID>, ID> implements Gene
     private Connection connection;
     private ResultSetMapper<T> mapper;
 
+    public AbstractDao(Connection connection, ResultSetMapper<T> mapper) {
+        this.connection = connection;
+        this.mapper = mapper;
+    }
+
     protected abstract String getSelectQuery();
+
     protected abstract String getSelectByIdQuery();
+
     protected abstract String getInsertQuery();
+
     protected abstract String getDeleteQuery();
 
     protected abstract void prepareInsertStatement(PreparedStatement statement, T object);

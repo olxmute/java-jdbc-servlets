@@ -1,9 +1,11 @@
 package com.jdbcservlets.data.dao.impl;
 
+import com.jdbcservlets.data.config.ConnectionFactory;
 import com.jdbcservlets.data.dao.AbstractDao;
 import com.jdbcservlets.data.dao.ClientDao;
 import com.jdbcservlets.data.domain.Client;
 import com.jdbcservlets.data.exeptions.PersistenceException;
+import com.jdbcservlets.data.mapper.ClientMapper;
 import lombok.extern.slf4j.Slf4j;
 
 import java.sql.PreparedStatement;
@@ -16,6 +18,10 @@ import static com.jdbcservlets.data.queries.ClientsSqlQueries.SELECT_BY_ID_QUERY
 
 @Slf4j
 public class ClientDaoImpl extends AbstractDao<Client, Long> implements ClientDao {
+
+    public ClientDaoImpl() {
+        super(ConnectionFactory.getConnection(), new ClientMapper());
+    }
 
     @Override
     protected String getSelectQuery() {
