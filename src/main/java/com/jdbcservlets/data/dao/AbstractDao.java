@@ -2,6 +2,7 @@ package com.jdbcservlets.data.dao;
 
 import com.jdbcservlets.data.domain.Persistable;
 import com.jdbcservlets.data.exeptions.PersistenceException;
+import com.jdbcservlets.data.mapper.ResultSetMapper;
 import lombok.extern.slf4j.Slf4j;
 
 import java.sql.Connection;
@@ -11,22 +12,16 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 
-import static java.util.Collections.emptyList;
-
 @Slf4j
 public abstract class AbstractDao<T extends Persistable<ID>, ID> implements GenericDao<T, ID> {
 
     private Connection connection;
+    private ResultSetMapper<T> mapper;
 
     protected abstract String getSelectQuery();
-
     protected abstract String getSelectByIdQuery();
-
     protected abstract String getInsertQuery();
-
     protected abstract String getDeleteQuery();
-
-    protected abstract List<T> parseResultSet(ResultSet resultSet);
 
     protected abstract void prepareInsertStatement(PreparedStatement statement, T object);
 
@@ -36,7 +31,7 @@ public abstract class AbstractDao<T extends Persistable<ID>, ID> implements Gene
         try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setString(1, id.toString());
             ResultSet resultSet = preparedStatement.executeQuery();
-            List<T> res = Optional.ofNullable(parseResultSet(resultSet)).orElse(emptyList());
+            List<T> res = mapper.map(resultSet);
             if (res.size() > 1) {
                 throw new SQLException("Received more than one record.");
             }
@@ -52,7 +47,7 @@ public abstract class AbstractDao<T extends Persistable<ID>, ID> implements Gene
         String query = getSelectQuery();
         try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             ResultSet resultSet = preparedStatement.executeQuery();
-            return Optional.ofNullable(parseResultSet(resultSet)).orElse(emptyList());
+            return mapper.map(resultSet);
         } catch (SQLException e) {
             log.error(e.getMessage(), e);
             throw new PersistenceException(e);
@@ -75,7 +70,7 @@ public abstract class AbstractDao<T extends Persistable<ID>, ID> implements Gene
         String selectQuery = getSelectQuery() + " WHERE id = last_insert_id()";
         try (PreparedStatement statement = connection.prepareStatement(selectQuery)) {
             ResultSet rs = statement.executeQuery();
-            List<T> list = parseResultSet(rs);
+            List<T> list = mapper.map(rs);
             if ((list == null) || (list.size() != 1)) {
                 throw new SQLException("Exception on findByPK new persist data.");
             }
