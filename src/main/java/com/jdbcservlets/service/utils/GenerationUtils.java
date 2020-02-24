@@ -1,15 +1,15 @@
-package com.jdbcservlets.service.impl;
+package com.jdbcservlets.service.utils;
 
-import com.jdbcservlets.service.GenerationService;
+import lombok.experimental.UtilityClass;
 import org.apache.commons.lang3.RandomStringUtils;
 
 import java.util.regex.Pattern;
 
-public class GenerationServiceImpl implements GenerationService {
+@UtilityClass
+public class GenerationUtils {
 
-    private static final Pattern PASSWORD_REGEX = Pattern.compile("^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,}$");
+    private final Pattern PASSWORD_REGEX = Pattern.compile("^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,}$");
 
-    @Override
     public String generatePassword() {
         String password;
         do {
@@ -18,4 +18,5 @@ public class GenerationServiceImpl implements GenerationService {
 
         return password;
     }
+
 }

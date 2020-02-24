@@ -6,8 +6,8 @@ import com.jdbcservlets.data.domain.Client;
 import com.jdbcservlets.dto.ClientCreateDto;
 import com.jdbcservlets.dto.ClientResponseDto;
 import com.jdbcservlets.service.ClientService;
-import com.jdbcservlets.service.GenerationService;
 import com.jdbcservlets.service.exceptions.ClientNotFoundException;
+import com.jdbcservlets.service.utils.GenerationUtils;
 
 import java.util.List;
 
@@ -18,11 +18,10 @@ public class ClientServiceImpl implements ClientService {
     private static final String COMPANY_NAME = "google";
 
     private final ClientDao clientDao = new ClientDaoImpl();
-    private final GenerationService generationService = new GenerationServiceImpl();
 
     @Override
     public ClientResponseDto create(ClientCreateDto createDto) {
-        String password = generationService.generatePassword();
+        String password = GenerationUtils.generatePassword();
         String email = createDto.getFirstName().toLowerCase()
                 + "."
                 + createDto.getLastName().toLowerCase()
