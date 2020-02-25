@@ -1,4 +1,4 @@
-package com.jdbcservlets.service.utils;
+package com.jdbcservlets.utils;
 
 import lombok.experimental.UtilityClass;
 import org.apache.commons.lang3.RandomStringUtils;

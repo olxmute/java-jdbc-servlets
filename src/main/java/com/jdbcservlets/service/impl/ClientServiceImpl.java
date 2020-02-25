@@ -1,5 +1,6 @@
 package com.jdbcservlets.service.impl;
 
+import com.jdbcservlets.converter.ClientToResponseDtoConverter;
 import com.jdbcservlets.data.dao.ClientDao;
 import com.jdbcservlets.data.dao.impl.ClientDaoImpl;
 import com.jdbcservlets.data.domain.Client;
@@ -7,7 +8,7 @@ import com.jdbcservlets.dto.ClientCreateDto;
 import com.jdbcservlets.dto.ClientResponseDto;
 import com.jdbcservlets.service.ClientService;
 import com.jdbcservlets.service.exceptions.ClientNotFoundException;
-import com.jdbcservlets.service.utils.GenerationUtils;
+import com.jdbcservlets.utils.GenerationUtils;
 
 import java.util.List;
 
@@ -18,6 +19,8 @@ public class ClientServiceImpl implements ClientService {
     private static final String COMPANY_NAME = "google";
 
     private final ClientDao clientDao = new ClientDaoImpl();
+
+    private final ClientToResponseDtoConverter converter = new ClientToResponseDtoConverter();
 
     @Override
     public ClientResponseDto create(ClientCreateDto createDto) {
@@ -39,19 +42,19 @@ public class ClientServiceImpl implements ClientService {
 
         Client savedClient = clientDao.save(client);
 
-        return getClientResponseDto(savedClient);
+        return converter.convert(savedClient);
     }
 
     @Override
     public ClientResponseDto findById(Long id) {
-        return getClientResponseDto(this.getClientById(id));
+        return converter.convert(this.getClientById(id));
     }
 
     @Override
     public List<ClientResponseDto> findAll() {
         return clientDao.findAll()
                 .stream()
-                .map(this::getClientResponseDto)
+                .map(converter::convert)
                 .collect(toList());
     }
 
@@ -64,13 +67,4 @@ public class ClientServiceImpl implements ClientService {
         return clientDao.findById(id).orElseThrow(() -> new ClientNotFoundException("Client not found!"));
     }
 
-    private ClientResponseDto getClientResponseDto(Client savedClient) {
-        return ClientResponseDto.builder()
-                .id(savedClient.getId())
-                .firstName(savedClient.getFirstName())
-                .lastName(savedClient.getLastName())
-                .email(savedClient.getEmail())
-                .phoneNumber(savedClient.getPhoneNumber())
-                .build();
-    }
 }
