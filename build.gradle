@@ -1,18 +1,29 @@
 plugins {
     id 'java'
+    id 'java-library'
     id 'application'
 }
 
 group 'com.example.jdbcservlets'
 version '1.0-SNAPSHOT'
 
-sourceCompatibility = 13
-targetCompatibility = 13
-
 mainClassName = 'com.jdbcservlets.BankApplication'
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_13
+    targetCompatibility = JavaVersion.VERSION_13
+}
 
 repositories {
     mavenCentral()
+}
+
+ext {
+    tomcatVersion = '8.5.23'
+}
+
+compileJava {
+    options.compilerArgs += ["--enable-preview"]
 }
 
 dependencies {
@@ -20,6 +31,15 @@ dependencies {
     compile group: 'org.slf4j', name: 'slf4j-api', version: '1.7.30'
     compile group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.13.0'
     compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.9'
+
+    compile group: 'javax.xml.bind', name: 'jaxb-api', version: '2.3.1'
+    compile group: 'javax.servlet', name: 'javax.servlet-api', version: '4.0.1'
+
+    compile "org.apache.tomcat.embed:tomcat-embed-core:${tomcatVersion}"
+    compile "org.apache.tomcat.embed:tomcat-embed-jasper:${tomcatVersion}"
+    compile "org.apache.tomcat:tomcat-jasper:${tomcatVersion}"
+    compile "org.apache.tomcat:tomcat-jasper-el:${tomcatVersion}"
+    compile "org.apache.tomcat:tomcat-util:${tomcatVersion}"
 
     testCompile group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: '5.3.2'
 
