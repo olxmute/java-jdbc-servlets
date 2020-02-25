@@ -19,7 +19,6 @@ public class ClientServiceImpl implements ClientService {
     private static final String COMPANY_NAME = "google";
 
     private final ClientDao clientDao = new ClientDaoImpl();
-
     private final ClientToResponseDtoConverter converter = new ClientToResponseDtoConverter();
 
     @Override
@@ -47,7 +46,7 @@ public class ClientServiceImpl implements ClientService {
 
     @Override
     public ClientResponseDto findById(Long id) {
-        return converter.convert(this.getClientById(id));
+        return converter.convert(getClientById(id));
     }
 
     @Override
@@ -60,7 +59,7 @@ public class ClientServiceImpl implements ClientService {
 
     @Override
     public void deleteById(Long id) {
-        clientDao.delete(this.getClientById(id));
+        clientDao.delete(getClientById(id));
     }
 
     private Client getClientById(Long id) {
