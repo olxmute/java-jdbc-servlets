@@ -28,8 +28,12 @@ compileJava {
 
 dependencies {
     compile group: 'mysql', name: 'mysql-connector-java', version: '8.0.19'
+
     compile group: 'org.slf4j', name: 'slf4j-api', version: '1.7.30'
+    compile group: 'org.slf4j', name: 'slf4j-log4j12', version: '1.7.30'
+    compile group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.13.0'
     compile group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.13.0'
+
     compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.9'
 
     compile group: 'javax.xml.bind', name: 'jaxb-api', version: '2.3.1'

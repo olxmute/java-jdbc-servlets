@@ -1,6 +1,8 @@
 package com.jdbcservlets.server;
 
 import com.jdbcservlets.BankApplication;
+import lombok.experimental.UtilityClass;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.catalina.LifecycleException;
 import org.apache.catalina.WebResourceRoot;
 import org.apache.catalina.WebResourceSet;
@@ -17,22 +19,27 @@ import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-//@Slf4j
+@Slf4j
+@UtilityClass
 public class EmbeddedServer {
-    private static File getRootFolder() throws URISyntaxException {
+
+    private final String RUNNING_JAR_PATH = "/build/"; // "/target/" for maven
+    private final String BUILD_CLASSES_PATH = "build/classes/java/main"; // "/target/classes" for maven
+
+    private File getRootFolder() throws URISyntaxException {
         File root;
         String runningJarPath = BankApplication.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath().replaceAll("\\\\", "/");
-        int lastIndexOf = runningJarPath.lastIndexOf("/build/");
+        int lastIndexOf = runningJarPath.lastIndexOf(RUNNING_JAR_PATH);
         if (lastIndexOf < 0) {
             root = new File("");
         } else {
             root = new File(runningJarPath.substring(0, lastIndexOf));
         }
-        System.out.println(("application resolved root folder: {}" + root.getAbsolutePath()));
+        log.info("Application resolved root folder: {}", root.getAbsolutePath());
         return root;
     }
 
-    public static void start() {
+    public void start() {
         try {
             File root = getRootFolder();
             System.setProperty("org.apache.catalina.startup.EXIT_ON_INIT_FAILURE", "true");
@@ -56,17 +63,17 @@ public class EmbeddedServer {
             //Set execution independent of current thread context classloader (compatibility with exec:java mojo)
             ctx.setParentClassLoader(BankApplication.class.getClassLoader());
 
-            System.out.println("configuring app with basedir: " + webContentFolder.getAbsolutePath());
+            log.info("Configuring app with basedir: {}", webContentFolder.getAbsolutePath());
 
             // Declare an alternative location for your "WEB-INF/classes" dir
             // Servlet 3.0 annotation will work
-            File additionWebInfClassesFolder = new File(root.getAbsolutePath(), "build/classes/java/main");
+            File additionWebInfClassesFolder = new File(root.getAbsolutePath(), BUILD_CLASSES_PATH);
             WebResourceRoot resources = new StandardRoot(ctx);
 
             WebResourceSet resourceSet;
             if (additionWebInfClassesFolder.exists()) {
-                resourceSet = new DirResourceSet(resources, "/WEB-INF/classes/java/main", additionWebInfClassesFolder.getAbsolutePath(), "/");
-                System.out.println(("loading WEB-INF resources from as '{}'" + additionWebInfClassesFolder.getAbsolutePath()));
+                resourceSet = new DirResourceSet(resources, "/webapp/WEB-INF/classes/java/main", additionWebInfClassesFolder.getAbsolutePath(), "/");
+                log.info("Loading WEB-INF resources from as '{}'", additionWebInfClassesFolder.getAbsolutePath());
             } else {
                 resourceSet = new EmptyResourceSet(resources);
             }
@@ -76,7 +83,7 @@ public class EmbeddedServer {
             tomcat.start();
             tomcat.getServer().await();
         } catch (LifecycleException | IOException | URISyntaxException | ServletException e) {
-            System.err.println("Failed to start embedded server." + e);
+            log.error("Failed to start embedded server.", e);
         }
     }
 }
