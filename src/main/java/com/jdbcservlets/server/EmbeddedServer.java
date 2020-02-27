@@ -23,13 +23,10 @@ import java.nio.file.Path;
 @UtilityClass
 public class EmbeddedServer {
 
-    private final String RUNNING_JAR_PATH = "/build/"; // "/target/" for maven
-    private final String BUILD_CLASSES_PATH = "build/classes/java/main"; // "/target/classes" for maven
-
     private File getRootFolder() throws URISyntaxException {
         File root;
-        String runningJarPath = BankApplication.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath().replaceAll("\\\\", "/");
-        int lastIndexOf = runningJarPath.lastIndexOf(RUNNING_JAR_PATH);
+        String runningJarPath = EmbeddedServer.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath().replaceAll("\\\\", "/");
+        int lastIndexOf = runningJarPath.lastIndexOf("/target/");
         if (lastIndexOf < 0) {
             root = new File("");
         } else {
@@ -67,12 +64,12 @@ public class EmbeddedServer {
 
             // Declare an alternative location for your "WEB-INF/classes" dir
             // Servlet 3.0 annotation will work
-            File additionWebInfClassesFolder = new File(root.getAbsolutePath(), BUILD_CLASSES_PATH);
+            File additionWebInfClassesFolder = new File(root.getAbsolutePath(), "target/classes");
             WebResourceRoot resources = new StandardRoot(ctx);
 
             WebResourceSet resourceSet;
             if (additionWebInfClassesFolder.exists()) {
-                resourceSet = new DirResourceSet(resources, "/webapp/WEB-INF/classes/java/main", additionWebInfClassesFolder.getAbsolutePath(), "/");
+                resourceSet = new DirResourceSet(resources, "/WEB-INF/classes/", additionWebInfClassesFolder.getAbsolutePath(), "/");
                 log.info("Loading WEB-INF resources from as '{}'", additionWebInfClassesFolder.getAbsolutePath());
             } else {
                 resourceSet = new EmptyResourceSet(resources);
