@@ -18,6 +18,11 @@
         <slf4j-api.version>1.7.30</slf4j-api.version>
         <log4j-core.version>2.13.0</log4j-core.version>
         <commons-lang3.version>3.9</commons-lang3.version>
+
+        <javax.servlet.version>3.1.0</javax.servlet.version>
+        <jaxb-api.version>2.3.1</jaxb-api.version>
+
+        <tomcat.version>8.5.23</tomcat.version>
     </properties>
 
     <dependencies>
@@ -52,6 +57,43 @@
             <artifactId>mysql-connector-java</artifactId>
             <version>${mysql.connector.version}</version>
         </dependency>
+
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <version>${javax.servlet.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>javax.xml.bind</groupId>
+            <artifactId>jaxb-api</artifactId>
+            <version>${jaxb-api.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.tomcat.embed</groupId>
+            <artifactId>tomcat-embed-core</artifactId>
+            <version>${tomcat.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.tomcat.embed</groupId>
+            <artifactId>tomcat-embed-jasper</artifactId>
+            <version>${tomcat.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.tomcat</groupId>
+            <artifactId>tomcat-jasper</artifactId>
+            <version>${tomcat.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.tomcat</groupId>
+            <artifactId>tomcat-jasper-el</artifactId>
+            <version>${tomcat.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.tomcat</groupId>
+            <artifactId>tomcat-jsp-api</artifactId>
+            <version>${tomcat.version}</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -68,16 +110,6 @@
             </plugin>
 
             <plugin>
-                <groupId>org.apache.tomcat.maven</groupId>
-                <artifactId>tomcat7-maven-plugin</artifactId>
-                <version>2.2</version>
-                <configuration>
-                    <path>/</path>
-                    <port>8082</port>
-                </configuration>
-            </plugin>
-
-            <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>appassembler-maven-plugin</artifactId>
                 <version>2.0.0</version>
@@ -86,7 +118,7 @@
                     <programs>
                         <program>
                             <mainClass>com.jdbcservlets.BankApplication</mainClass>
-                            <name>webapp</name>
+                            <name>jdbc-servlets-example</name>
                         </program>
                     </programs>
                 </configuration>
