@@ -46,7 +46,7 @@ public class ClientDaoImpl extends AbstractDao<Client, Long> implements ClientDa
     @Override
     protected void prepareInsertStatement(PreparedStatement statement, Client client) {
         try {
-            statement.setString(1, client.getId().toString());
+            statement.setString(1, client.getId() == null ? null : client.getId().toString());
             statement.setString(2, client.getFirstName());
             statement.setString(3, client.getLastName());
             statement.setString(4, client.getEmail());
