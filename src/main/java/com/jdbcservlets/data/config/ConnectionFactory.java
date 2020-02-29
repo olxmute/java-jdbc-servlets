@@ -1,6 +1,6 @@
 package com.jdbcservlets.data.config;
 
-import com.jdbcservlets.data.exeptions.ConnectionException;
+import com.jdbcservlets.exeptions.ConnectionException;
 import lombok.extern.slf4j.Slf4j;
 
 import java.sql.Connection;
@@ -12,7 +12,7 @@ public class ConnectionFactory {
 
     private static final String CONNECTION_FAILURE_MSG = "Connection to DB failed";
 
-    private static final String URL = "jdbc:mysql://localhost:3306/bankapplication?user=root&password=1234";
+    private static final String URL = "jdbc:mysql://localhost:3306/bankapplication?user=root&password=1234&serverTimezone=UTC";
 
     public static Connection getConnection() {
         try {

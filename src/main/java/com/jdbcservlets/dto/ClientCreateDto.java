@@ -1,8 +1,8 @@
 package com.jdbcservlets.dto;
 
-import lombok.Value;
+import lombok.Data;
 
-@Value
+@Data
 public class ClientCreateDto {
     private String firstName;
     private String lastName;
