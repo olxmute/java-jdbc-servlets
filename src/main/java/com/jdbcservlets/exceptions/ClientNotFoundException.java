@@ -1,4 +1,4 @@
-package com.jdbcservlets.service.exceptions;
+package com.jdbcservlets.exceptions;
 
 public class ClientNotFoundException extends EntryNotFountException {
     public ClientNotFoundException(String message) {

@@ -6,8 +6,8 @@ import com.jdbcservlets.data.dao.impl.ClientDaoImpl;
 import com.jdbcservlets.data.domain.Client;
 import com.jdbcservlets.dto.ClientCreateDto;
 import com.jdbcservlets.dto.ClientResponseDto;
+import com.jdbcservlets.exceptions.ClientNotFoundException;
 import com.jdbcservlets.service.ClientService;
-import com.jdbcservlets.service.exceptions.ClientNotFoundException;
 import com.jdbcservlets.utils.GenerationUtils;
 
 import java.util.List;
