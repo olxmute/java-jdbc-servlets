@@ -12,7 +12,7 @@ public class ConnectionFactory {
 
     private static final String CONNECTION_FAILURE_MSG = "Connection to DB failed";
 
-    private static final String URL = "jdbc:mysql://localhost:3306/bankapplication?user=root&password=1234";
+    private static final String URL = "jdbc:mysql://localhost:3306/bankapplication?user=root&password=1234&serverTimezone=UTC";
 
     public static Connection getConnection() {
         try {
