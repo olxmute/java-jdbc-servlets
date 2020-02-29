@@ -22,8 +22,8 @@ public class ClientMapper implements ResultSetMapper<Client> {
                         .firstName(resultSet.getString("first_name"))
                         .lastName(resultSet.getString("last_name"))
                         .email(resultSet.getString("email"))
-                        .password("password")
-                        .phoneNumber("phone_number")
+                        .password(resultSet.getString("password"))
+                        .phoneNumber(resultSet.getString("phone_number"))
                         .build();
 
                 clients.add(client);

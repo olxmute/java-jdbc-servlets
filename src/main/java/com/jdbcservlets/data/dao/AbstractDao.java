@@ -29,9 +29,13 @@ public abstract class AbstractDao<T extends Persistable<ID>, ID> implements Gene
 
     protected abstract String getInsertQuery();
 
+    protected abstract String getUpdateQuery();
+
     protected abstract String getDeleteQuery();
 
     protected abstract void prepareInsertStatement(PreparedStatement statement, T object);
+
+    protected abstract void prepareUpdateStatement(PreparedStatement statement, T object);
 
     @Override
     public Optional<T> findById(ID id) {
@@ -64,9 +68,19 @@ public abstract class AbstractDao<T extends Persistable<ID>, ID> implements Gene
 
     @Override
     public T save(T object) {
-        String createQuery = getInsertQuery();
-        try (PreparedStatement statement = connection.prepareStatement(createQuery)) {
-            prepareInsertStatement(statement, object);
+        String query;
+        if (object.getId() == null) {
+            query = getInsertQuery();
+        } else {
+            query = getUpdateQuery();
+        }
+
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+            if (object.getId() == null) {
+                prepareInsertStatement(statement, object);
+            } else {
+                prepareUpdateStatement(statement, object);
+            }
             int count = statement.executeUpdate();
             if (count != 1) {
                 throw new SQLException("On persist modified more then 1 record: " + count);

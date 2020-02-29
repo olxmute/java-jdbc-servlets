@@ -15,6 +15,7 @@ import static com.jdbcservlets.data.queries.ClientsSqlQueries.DELETE_BY_ID;
 import static com.jdbcservlets.data.queries.ClientsSqlQueries.INSERT_QUERY;
 import static com.jdbcservlets.data.queries.ClientsSqlQueries.SELECT_ALL_QUERY;
 import static com.jdbcservlets.data.queries.ClientsSqlQueries.SELECT_BY_ID_QUERY;
+import static com.jdbcservlets.data.queries.ClientsSqlQueries.UPDATE_QUERY;
 
 @Slf4j
 public class ClientDaoImpl extends AbstractDao<Client, Long> implements ClientDao {
@@ -39,6 +40,11 @@ public class ClientDaoImpl extends AbstractDao<Client, Long> implements ClientDa
     }
 
     @Override
+    protected String getUpdateQuery() {
+        return UPDATE_QUERY;
+    }
+
+    @Override
     protected String getDeleteQuery() {
         return DELETE_BY_ID;
     }
@@ -46,12 +52,25 @@ public class ClientDaoImpl extends AbstractDao<Client, Long> implements ClientDa
     @Override
     protected void prepareInsertStatement(PreparedStatement statement, Client client) {
         try {
-            statement.setString(1, client.getId().toString());
-            statement.setString(2, client.getFirstName());
-            statement.setString(3, client.getLastName());
-            statement.setString(4, client.getEmail());
-            statement.setString(5, client.getPassword());
-            statement.setString(6, client.getPhoneNumber());
+            statement.setString(1, client.getFirstName());
+            statement.setString(2, client.getLastName());
+            statement.setString(3, client.getEmail());
+            statement.setString(4, client.getPassword());
+            statement.setString(5, client.getPhoneNumber());
+        } catch (SQLException e) {
+            log.error(e.getMessage(), e);
+            throw new PersistenceException(e);
+        }
+    }
+
+    @Override
+    protected void prepareUpdateStatement(PreparedStatement statement, Client client) {
+        try {
+            statement.setString(1, client.getFirstName());
+            statement.setString(2, client.getLastName());
+            statement.setString(3, client.getEmail());
+            statement.setString(4, client.getPhoneNumber());
+            statement.setString(5, client.getId().toString());
         } catch (SQLException e) {
             log.error(e.getMessage(), e);
             throw new PersistenceException(e);
