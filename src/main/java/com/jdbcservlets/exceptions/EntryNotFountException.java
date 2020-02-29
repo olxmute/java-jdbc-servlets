@@ -1,4 +1,4 @@
-package com.jdbcservlets.service.exceptions;
+package com.jdbcservlets.exceptions;
 
 public class EntryNotFountException extends RuntimeException {
     public EntryNotFountException(String message) {

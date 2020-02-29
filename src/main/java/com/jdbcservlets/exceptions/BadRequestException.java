@@ -1,4 +1,4 @@
-package com.jdbcservlets.exeptions;
+package com.jdbcservlets.exceptions;
 
 public class BadRequestException extends RuntimeException {
     public BadRequestException(String message) {

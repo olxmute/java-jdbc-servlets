@@ -1,4 +1,4 @@
-package com.jdbcservlets.exeptions;
+package com.jdbcservlets.exceptions;
 
 public class IORuntimeException extends RuntimeException {
     public IORuntimeException(String message) {

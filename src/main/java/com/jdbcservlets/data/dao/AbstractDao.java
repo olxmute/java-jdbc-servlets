@@ -2,7 +2,7 @@ package com.jdbcservlets.data.dao;
 
 import com.jdbcservlets.data.domain.Persistable;
 import com.jdbcservlets.data.mapper.ResultSetMapper;
-import com.jdbcservlets.exeptions.PersistenceException;
+import com.jdbcservlets.exceptions.PersistenceException;
 import lombok.extern.slf4j.Slf4j;
 
 import java.sql.Connection;
