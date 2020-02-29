@@ -6,7 +6,9 @@ import com.jdbcservlets.data.dao.impl.ClientDaoImpl;
 import com.jdbcservlets.data.domain.Client;
 import com.jdbcservlets.dto.ClientCreateDto;
 import com.jdbcservlets.dto.ClientResponseDto;
+import com.jdbcservlets.dto.ClientUpdateDto;
 import com.jdbcservlets.exceptions.ClientNotFoundException;
+import com.jdbcservlets.exceptions.ValidationException;
 import com.jdbcservlets.service.ClientService;
 import com.jdbcservlets.utils.GenerationUtils;
 
@@ -17,6 +19,7 @@ import static java.util.stream.Collectors.toList;
 public class ClientServiceImpl implements ClientService {
 
     private static final String COMPANY_NAME = "google";
+    private static final String EMAIL_ENDING = "@" + COMPANY_NAME + ".com";
 
     private final ClientDao clientDao = new ClientDaoImpl();
     private final ClientToResponseDtoConverter converter = new ClientToResponseDtoConverter();
@@ -27,9 +30,7 @@ public class ClientServiceImpl implements ClientService {
         String email = createDto.getFirstName().toLowerCase()
                 + "."
                 + createDto.getLastName().toLowerCase()
-                + "@"
-                + COMPANY_NAME
-                + ".com";
+                + EMAIL_ENDING;
 
         Client client = Client.builder()
                 .firstName(createDto.getFirstName())
@@ -42,6 +43,28 @@ public class ClientServiceImpl implements ClientService {
         Client savedClient = clientDao.save(client);
 
         return converter.convert(savedClient);
+    }
+
+    @Override
+    public ClientResponseDto update(ClientUpdateDto updateDto, Long id) {
+
+        String email = updateDto.getEmail();
+
+        if (!email.endsWith(EMAIL_ENDING)) {
+            throw new ValidationException("Email " + email + " is invalid!");
+        }
+
+        Client client = Client.builder()
+                .id(id)
+                .firstName(updateDto.getFirstName())
+                .lastName(updateDto.getLastName())
+                .email(email)
+                .phoneNumber(updateDto.getPhoneNumber())
+                .build();
+
+        Client updatedClient = clientDao.save(client);
+
+        return converter.convert(updatedClient);
     }
 
     @Override
