@@ -3,6 +3,7 @@ package com.jdbcservlets.controllers;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jdbcservlets.dto.ClientCreateDto;
 import com.jdbcservlets.dto.ClientResponseDto;
+import com.jdbcservlets.dto.ClientUpdateDto;
 import com.jdbcservlets.exceptions.BadRequestException;
 import com.jdbcservlets.exceptions.IORuntimeException;
 import com.jdbcservlets.service.ClientService;
@@ -53,14 +54,23 @@ public class ClientController extends HttpServlet {
             throw new BadRequestException("Invalid request path!");
         }
 
-        ClientCreateDto clientCreateDto;
-        try {
-            String payload = req.getReader().lines().collect(joining());
-            clientCreateDto = objectMapper.readValue(payload, ClientCreateDto.class);
-        } catch (IOException e) {
-            throw new IORuntimeException("Cannot read payload.");
-        }
+        ClientCreateDto clientCreateDto = readPayload(req, ClientCreateDto.class);
         ClientResponseDto responseBody = clientService.create(clientCreateDto);
+
+        sendAsJson(resp, responseBody);
+    }
+
+    @Override
+    protected void doPut(HttpServletRequest req, HttpServletResponse resp) {
+        String pathInfo = req.getPathInfo();
+
+        if (pathInfo == null || pathInfo.equals("/") || pathInfo.split("/").length != 2) {
+            throw new BadRequestException("Invalid request path!");
+        }
+
+        String clientId = pathInfo.split("/")[1];
+        ClientUpdateDto clientUpdateDto = readPayload(req, ClientUpdateDto.class);
+        ClientResponseDto responseBody = clientService.update(clientUpdateDto, Long.valueOf(clientId));
 
         sendAsJson(resp, responseBody);
     }
@@ -75,6 +85,15 @@ public class ClientController extends HttpServlet {
 
         String clientId = pathInfo.split("/")[1];
         clientService.deleteById(Long.valueOf(clientId));
+    }
+
+    private <T> T readPayload(HttpServletRequest req, Class<T> clazz) {
+        try {
+            String payload = req.getReader().lines().collect(joining());
+            return objectMapper.readValue(payload, clazz);
+        } catch (IOException e) {
+            throw new IORuntimeException("Cannot read payload.");
+        }
     }
 
     private void sendAsJson(HttpServletResponse response, Object obj) {
