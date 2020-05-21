@@ -22,7 +22,7 @@
         <javax.servlet.version>3.1.0</javax.servlet.version>
         <jaxb-api.version>2.3.1</jaxb-api.version>
 
-        <tomcat.version>8.5.23</tomcat.version>
+        <tomcat.version>9.0.35</tomcat.version>
         <jackson.version>2.10.2</jackson.version>
     </properties>
 
