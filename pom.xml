@@ -16,7 +16,7 @@
         <mysql.connector.version>8.0.19</mysql.connector.version>
         <lombok.version>1.18.12</lombok.version>
         <slf4j-api.version>1.7.30</slf4j-api.version>
-        <log4j-core.version>2.13.0</log4j-core.version>
+        <log4j-core.version>2.13.2</log4j-core.version>
         <commons-lang3.version>3.9</commons-lang3.version>
 
         <javax.servlet.version>3.1.0</javax.servlet.version>
